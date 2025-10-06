@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import express from 'express';
 import { rateLimiter } from './middleware/rateLimit.js';
 import { rateLimit } from 'express-rate-limit';
+import helmet from 'helmet';
 
 const limiter = rateLimit({
   windowMs: 10 * 1000, // 10 second
@@ -12,6 +13,17 @@ const limiter = rateLimit({
 });
 
 const app = express();
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        reportUri: '/csp-violation-report',
+      },
+    },
+  })
+);
 
 app.use((req, res, next) => {
   res.set({ 'Access-Control-Allow-Origin': 'http://127.0.0.1:5500' });
