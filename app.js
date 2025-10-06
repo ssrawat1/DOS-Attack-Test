@@ -1,6 +1,15 @@
 import bcrypt from 'bcrypt';
 import express from 'express';
 import { rateLimiter } from './middleware/rateLimit.js';
+import { rateLimit } from 'express-rate-limit';
+
+const limiter = rateLimit({
+  windowMs: 10 * 1000, // 10 second
+  limit: 2, // 2 request
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  ipv6Subnet: 56,
+});
 
 const app = express();
 
@@ -13,7 +22,7 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello World</h1>');
 });
 
-app.get('/register', rateLimiter({ windowSize: 60000, maxRequest: 10 }), async (req, res) => {
+app.get('/register', limiter, async (req, res) => {
   bcrypt.hash('$aNjAy_pb_03', 14);
   return res.json({ message: 'Register successfully' });
 });
