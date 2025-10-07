@@ -1,3 +1,4 @@
+/* This is custom Rate Limiter */
 let rateLimitIps = {};
 
 export const rateLimiter = ({ windowSize, maxRequest }) => {

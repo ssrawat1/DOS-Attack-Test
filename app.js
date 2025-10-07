@@ -3,17 +3,19 @@ import express from 'express';
 import { rateLimiter } from './middleware/rateLimit.js';
 import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
+import throttle from './middleware/throttle.js';
 
 const limiter = rateLimit({
-  windowMs: 10 * 1000, // 10 second
-  limit: 2, // 2 request
+  windowMs: 60 * 1000, // 10 second
+  limit: 10, // 2 request
   standardHeaders: 'draft-8',
   legacyHeaders: false,
 });
 
 const app = express();
+app.use(express.json());
 
-app.use(limiter)
+// app.use(limiter);
 
 app.use(
   helmet({
@@ -35,8 +37,8 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello World</h1>');
 });
 
-app.get('/register', limiter, async (req, res) => {
-  bcrypt.hash('$aNjAy_pb_03', 14);
+app.get('/register', limiter, throttle({ waitTime: 2000 }), async (req, res) => {
+  await bcrypt.hash('$aNjAy_pb_03', 14);
   return res.json({ message: 'Register successfully' });
 });
 

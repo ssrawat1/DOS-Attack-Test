@@ -16,5 +16,5 @@ const button = document.querySelector('button');
 
 button.addEventListener('click', (e) => {
   e.preventDefault();
-  fetch('http://localhost:4000');
+  fetch('http://localhost:4000/register');
 });
