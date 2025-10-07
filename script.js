@@ -11,3 +11,10 @@
 //   const data = await res.json();
 //   console.log(data);
 // }, 0);
+
+const button = document.querySelector('button');
+
+button.addEventListener('click', (e) => {
+  e.preventDefault();
+  fetch('http://localhost:4000');
+});

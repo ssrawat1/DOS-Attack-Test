@@ -9,10 +9,11 @@ const limiter = rateLimit({
   limit: 2, // 2 request
   standardHeaders: 'draft-8',
   legacyHeaders: false,
-  ipv6Subnet: 56,
 });
 
 const app = express();
+
+app.use(limiter)
 
 app.use(
   helmet({
